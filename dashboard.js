@@ -666,7 +666,7 @@ async function loadAuditLog() {
       row.innerHTML = `
         <td>${entry.id}</td>
         <td>${entry.action}</td>
-        <td>${entry.timestamp ? new Date(entry.timestamp).toLocaleString('en-IN') : "N/A"}</td>
+        <td>${entry.timestamp ? new Date(entry.timestamp + 'Z').toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : "N/A"}</td>
       `;
     });
 
