@@ -6,8 +6,8 @@ function login(){
 
     if(
         role === "admin" &&
-        username === "admin01" &&
-        password === "Admin@123"
+        username === "admin" &&
+        password === "admin@26"
     ){
         alert("Admin Login Successful");
         window.location.href = "dashboard.html";
@@ -15,8 +15,8 @@ function login(){
 
     else if(
         role === "employee" &&
-        username === "employee01" &&
-        password === "Emp@123"
+        username === "employee" &&
+        password === "emp@26"
     ){
         alert("Employee Login Successful");
         window.location.href = "dashboard.html";
@@ -24,8 +24,8 @@ function login(){
 
     else if(
         role === "tracker" &&
-        username === "tech01" &&
-        password === "Tech@123"
+        username === "tech" &&
+        password === "tech@26"
     ){
         alert("Maintenance Tracker Login Successful");
         window.location.href = "dashboard.html";
