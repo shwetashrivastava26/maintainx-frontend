@@ -192,6 +192,7 @@ background:#f9fafb;
 
 table tr:hover{
 background:#eef2ff;
+color:#1f2937;
 }
 
 /* =====================================
@@ -200,25 +201,25 @@ background:#eef2ff;
 
 .status-active{
 background:#dcfce7;
-color:#166534;
+color:#166534 !important;
 font-weight:bold;
 }
 
 .status-due{
 background:#fef3c7;
-color:#92400e;
+color:#92400e !important;
 font-weight:bold;
 }
 
 .status-overdue{
-background:#fee2e2;
-color:#b91c1c;
+background:#fee2e2 !important;
+color:#b91c1c !important;
 font-weight:bold;
 }
 
 .status-repair{
-background:#dbeafe;
-color:#1d4ed8;
+background:#dbeafe !important;
+color:#1d4ed8 !important;
 font-weight:bold;
 }
 
