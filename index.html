@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaintainX Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="login-container">
+
+    <div class="logo">
+        <h1>⚙ MaintainX</h1>
+    </div>
+
+    <div class="login-box">
+
+        <h2>Industrial Machine Maintenance Platform</h2>
+
+        <label>User Role</label>
+        <select id="role">
+            <option value="admin">Admin</option>
+            <option value="employee">Employee</option>
+            <option value="tracker">Maintenance Tracker</option>
+        </select>
+
+        <label>Username</label>
+        <input type="text" id="username">
+
+        <label>Password</label>
+        <input type="password" id="password">
+
+        <button onclick="login()">Login</button>
+
+        <p id="message"></p>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

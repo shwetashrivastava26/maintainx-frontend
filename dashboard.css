@@ -1,0 +1,371 @@
+/* =====================================
+   GENERAL
+===================================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+color:#333;
+}
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.sidebar{
+width:250px;
+height:100vh;
+background:#1f2937;
+color:white;
+position:fixed;
+left:0;
+top:0;
+padding:20px;
+overflow-y:auto;
+}
+
+.sidebar h2{
+margin-bottom:30px;
+text-align:center;
+}
+
+.sidebar a{
+display:block;
+padding:12px;
+margin-bottom:8px;
+text-decoration:none;
+color:white;
+border-radius:6px;
+transition:0.3s;
+}
+
+.sidebar a:hover{
+background:#374151;
+}
+
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
+.main-content{
+margin-left:250px;
+padding:25px;
+width:100%;
+}
+
+header{
+margin-bottom:25px;
+}
+
+header h1{
+color:#1f2937;
+}
+
+/* =====================================
+   SECTIONS
+===================================== */
+
+section{
+background:white;
+padding:20px;
+margin-bottom:25px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+section h2{
+margin-bottom:20px;
+color:#1f2937;
+}
+
+/* =====================================
+   DASHBOARD CARDS
+===================================== */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.card{
+background:#ffffff;
+border-left:5px solid #2563eb;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card h3{
+font-size:16px;
+margin-bottom:10px;
+}
+
+.card p{
+font-size:24px;
+font-weight:bold;
+color:#2563eb;
+}
+
+/* =====================================
+   CONTROLS
+===================================== */
+
+.registry-controls,
+.log-controls,
+.ticket-controls,
+.parts-controls{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin:15px 0;
+}
+
+input,
+select{
+padding:10px;
+border:1px solid #ccc;
+border-radius:6px;
+font-size:14px;
+}
+
+input:focus,
+select:focus{
+outline:none;
+border-color:#2563eb;
+}
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+button{
+background:#2563eb;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:6px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+button:active{
+transform:scale(0.98);
+}
+
+/* =====================================
+   TABLES
+===================================== */
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+table thead{
+background:#1f2937;
+color:white;
+}
+
+table th,
+table td{
+padding:12px;
+border:1px solid #ddd;
+text-align:center;
+}
+
+table tr:nth-child(even){
+background:#f9fafb;
+}
+
+table tr:hover{
+background:#eef2ff;
+}
+
+/* =====================================
+   STATUS COLORS
+===================================== */
+
+.status-active{
+background:#dcfce7;
+color:#166534;
+font-weight:bold;
+}
+
+.status-due{
+background:#fef3c7;
+color:#92400e;
+font-weight:bold;
+}
+
+.status-overdue{
+background:#fee2e2;
+color:#b91c1c;
+font-weight:bold;
+}
+
+.status-repair{
+background:#dbeafe;
+color:#1d4ed8;
+font-weight:bold;
+}
+
+/* =====================================
+   SEARCH + FILTER
+===================================== */
+
+#searchInput{
+width:250px;
+margin-right:10px;
+margin-bottom:15px;
+}
+
+/* =====================================
+   REPORTS
+===================================== */
+
+#reports .card{
+border-left:5px solid #10b981;
+}
+
+#reports .card p{
+color:#10b981;
+}
+
+/* =====================================
+   AUDIT TABLE
+===================================== */
+
+#auditTable td{
+font-size:14px;
+}
+
+/* =====================================
+   LOW STOCK ALERT
+===================================== */
+
+.low-stock{
+background:#fee2e2 !important;
+color:#b91c1c;
+font-weight:bold;
+}
+
+/* =====================================
+   HEADINGS
+===================================== */
+
+h3{
+margin-top:10px;
+}
+
+/* =====================================
+   SCROLLABLE TABLES
+===================================== */
+
+.table-container{
+overflow-x:auto;
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media(max-width:900px){
+
+.sidebar{
+width:200px;
+}
+
+.main-content{
+margin-left:200px;
+}
+
+.cards{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:700px){
+
+body{
+flex-direction:column;
+}
+
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+
+.main-content{
+margin-left:0;
+}
+
+.registry-controls,
+.log-controls,
+.ticket-controls,
+.parts-controls{
+flex-direction:column;
+}
+
+input,
+select,
+button{
+width:100%;
+}
+
+}
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 25px;
+}
+ 
+.chart-box {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+.chart-box canvas {
+  max-height: 280px;
+}
+.delete-audit-btn{
+
+    background:#dc3545;
+    color:white;
+
+    border:none;
+
+    padding:10px 20px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    margin-bottom:15px;
+}
+
+.delete-audit-btn:hover{
+
+    opacity:0.9;
+
+}

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaintainX Dashboard</title>
+<link rel="stylesheet" href="dashboard.css">
+
+<!-- Chart.js CDN — required for Reports charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+  <h2>⚙ MaintainX</h2>
+
+  <a href="#status">📊 Status</a>
+  <a href="#registry">🏭 Machine Registry</a>
+  <a href="#logs">🔧 Maintenance Log</a>
+  <a href="#tickets">⚠ Fault Tickets</a>
+  <a href="#parts">📦 Spare Parts Inventory</a>
+  <a href="#reports">📈 Maintenance Reports</a>
+  <a href="#audit">📋 Audit Log</a>
+  <a href="index.html">🚪 Logout</a>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+  <header>
+    <h1>Industrial Machine Maintenance Platform</h1>
+  </header>
+
+  <!-- STATUS DASHBOARD -->
+  <section id="status">
+
+    <h2>Status Dashboard</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>Total Machines</h3>
+        <p id="totalMachines">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Due Maintenance</h3>
+        <p id="dueMachines">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Overdue</h3>
+        <p id="overdueMachines">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Under Repair</h3>
+        <p id="repairMachines">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Open Tickets</h3>
+        <p id="openTicketsStatus">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Low Stock Parts</h3>
+        <p id="lowStockStatus">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Total Maintenance Cost</h3>
+        <p id="statusTotalCost">₹0</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- MACHINE REGISTRY -->
+  <section id="registry">
+
+    <h2>Machine Registry</h2>
+
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search Machine..."
+      onkeyup="searchMachine()">
+
+    <select id="blockFilter" onchange="filterBlock()">
+      <option value="all">All Blocks</option>
+      <option value="Turbine Shop">Turbine Shop</option>
+      <option value="Generator Manufacturing">Generator Manufacturing</option>
+      <option value="Transformer Division">Transformer Division</option>
+      <option value="Fabrication Shop">Fabrication Shop</option>
+      <option value="Machine Shop">Machine Shop</option>
+      <option value="Testing Facilities">Testing Facilities</option>
+    </select>
+
+    <div class="registry-controls">
+      <input type="text" id="machineCode" placeholder="Machine Code">
+      <input type="text" id="block" placeholder="Block">
+      <input type="text" id="machineName" placeholder="Machine Name">
+      <select id="machineStatus">
+        <option>Active</option>
+        <option>Due Maintenance</option>
+        <option>Overdue</option>
+        <option>Under Repair</option>
+      </select>
+      <button onclick="addMachine()">Add Machine</button>
+      <button onclick="exportMachines()" class="btn-export">⬇ Export CSV</button>
+    </div>
+
+    <div class="table-container">
+      <table id="machineTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Machine Code</th>
+            <th>Block</th>
+            <th>Machine Name</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="machineTableBody"></tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- MAINTENANCE LOG -->
+  <section id="logs">
+
+    <h2>Maintenance Log</h2>
+
+    <div class="log-controls">
+      <input type="text" id="logMachine" placeholder="Machine Name">
+      <input type="date" id="logDate">
+      <input type="text" id="logTechnician" placeholder="Technician">
+      <input type="number" id="logCost" placeholder="Cost (₹)" min="0">
+      <select id="logStatus">
+        <option>Completed</option>
+        <option>Pending</option>
+        <option>In Progress</option>
+      </select>
+      <button onclick="addLog()">Add Log</button>
+      <button onclick="exportLogs()" class="btn-export">⬇ Export CSV</button>
+    </div>
+
+    <div class="table-container">
+      <table id="logTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Machine</th>
+            <th>Date</th>
+            <th>Technician</th>
+            <th>Cost (₹)</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="logTableBody"></tbody>
+      </table>
+    </div>
+
+    <br>
+    <h3>Total Maintenance Cost : ₹ <span id="totalCost">0</span></h3>
+
+  </section>
+
+  <!-- FAULT TICKETS -->
+  <section id="tickets">
+
+    <h2>Fault Tickets</h2>
+
+    <div class="ticket-controls">
+      <input type="text" id="ticketMachine" placeholder="Machine Name">
+      <select id="ticketPriority">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+        <option>Critical</option>
+      </select>
+      <select id="ticketStatus">
+        <option>Open</option>
+        <option>In Progress</option>
+        <option>Closed</option>
+      </select>
+      <button onclick="addTicket()">Create Ticket</button>
+      <button onclick="exportTickets()" class="btn-export">⬇ Export CSV</button>
+    </div>
+
+    <div class="table-container">
+      <table id="ticketTable">
+        <thead>
+          <tr>
+            <th>Ticket ID</th>
+            <th>Machine</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="ticketTableBody"></tbody>
+      </table>
+    </div>
+
+    <br>
+    <h3>Open Tickets : <span id="openTickets">0</span></h3>
+
+  </section>
+
+  <!-- SPARE PARTS INVENTORY -->
+  <section id="parts">
+
+    <h2>Spare Parts Inventory</h2>
+
+    <div class="parts-controls">
+      <input type="text" id="partName" placeholder="Part Name">
+      <input type="number" id="partStock" placeholder="Stock" min="0">
+      <input type="number" id="partReorder" placeholder="Reorder Level" min="0">
+      <input type="number" id="partCost" placeholder="Cost (₹)" min="0">
+      <button onclick="addPart()">Add Part</button>
+      <button onclick="exportParts()" class="btn-export">⬇ Export CSV</button>
+    </div>
+
+    <div class="table-container">
+      <table id="partsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Part Name</th>
+            <th>Stock</th>
+            <th>Reorder Level</th>
+            <th>Cost (₹)</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="partsTableBody"></tbody>
+      </table>
+    </div>
+
+    <br>
+    <h3>Low Stock Parts : <span id="lowStockCount">0</span></h3>
+
+  </section>
+
+  <!-- MAINTENANCE REPORTS -->
+  <section id="reports">
+
+    <h2>Maintenance Reports</h2>
+
+    <!-- Summary Cards -->
+    <div class="cards">
+
+      <div class="card">
+        <h3>Total Maintenance Cost</h3>
+        <p id="reportTotalCost">₹0</p>
+      </div>
+
+      <div class="card">
+        <h3>Total Logs</h3>
+        <p id="reportTotalLogs">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Open Tickets</h3>
+        <p id="reportOpenTickets">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Low Stock Parts</h3>
+        <p id="reportLowStock">0</p>
+      </div>
+
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="charts-grid">
+
+      <!-- Chart 1: Machine Status Pie -->
+      <div class="chart-box">
+        <canvas id="machineStatusChart"></canvas>
+      </div>
+
+      <!-- Chart 2: Cost by Month Bar -->
+      <div class="chart-box">
+        <canvas id="costByMonthChart"></canvas>
+      </div>
+
+      <!-- Chart 3: Ticket Priority Doughnut -->
+      <div class="chart-box">
+        <canvas id="ticketPriorityChart"></canvas>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- AUDIT LOG -->
+  <section id="audit">
+
+    <h2>Audit Log</h2>
+    <button onclick="clearAuditLog()">
+    Clear Audit Log
+    </button>
+
+    <div class="table-container">
+      <table id="auditTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Action</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="auditTableBody"></tbody>
+      </table>
+    </div>
+
+  </section>
+
+</div>
+
+<script src="dashboard.js"></script>
+
+</body>
+</html>
