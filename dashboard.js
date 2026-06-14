@@ -975,40 +975,55 @@ window.onload = async function () {
   await refreshAll();
 };
 
-/* =====================================
-   QR CODE GENERATION
-===================================== */
-
 function generateQR(machineCode) {
   const url = `${window.location.origin}/machine.html?code=${machineCode}`;
 
-  const container = document.createElement("div");
-  container.style.cssText = "padding:20px; text-align:center; font-family:Arial;";
-  container.innerHTML = `<h3>${machineCode}</h3><div id="qrTemp"></div><p>${url}</p>`;
+  const existing = document.getElementById("qrModal");
+  if (existing) existing.remove();
 
-  document.body.appendChild(container);
+  const modal = document.createElement("div");
+  modal.id = "qrModal";
+  modal.style.cssText = `
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.6); display:flex; align-items:center;
+    justify-content:center; z-index: 10000;
+  `;
 
-  QRCode.toCanvas(container.querySelector("#qrTemp"), url, { width: 250 }, function (err, canvas) {
-    if (err) {
-      showToast("QR generation failed", "error");
-      document.body.removeChild(container);
-      return;
-    }
+  modal.innerHTML = `
+    <div style="background:#fff; padding:30px; border-radius:10px; text-align:center; font-family:Arial; max-width:320px;">
+      <h2 style="margin-top:0;">${machineCode}</h2>
+      <div id="qrCanvasBox"></div>
+      <p style="font-size:12px; word-break:break-all;">${url}</p>
+      <button onclick="printQR('${machineCode}')" style="margin:5px; padding:8px 16px;">Print</button>
+      <button onclick="document.getElementById('qrModal').remove()" style="margin:5px; padding:8px 16px;">Close</button>
+    </div>
+  `;
 
-    const printWindow = window.open("", "_blank");
-    printWindow.document.write(`
-      <html>
-        <head><title>QR - ${machineCode}</title></head>
-        <body style="text-align:center; font-family:Arial; padding:40px;">
-          <h2>${machineCode}</h2>
-          <img src="${canvas.toDataURL()}" />
-          <p>${url}</p>
-          <script>window.onload = function(){ window.print(); }</script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+  document.body.appendChild(modal);
 
-    document.body.removeChild(container);
+  new QRCode(document.getElementById("qrCanvasBox"), {
+    text: url,
+    width: 220,
+    height: 220
   });
+}
+
+function printQR(machineCode) {
+  const img = document.querySelector("#qrCanvasBox img") || document.querySelector("#qrCanvasBox canvas");
+  if (!img) return;
+
+  const src = img.tagName === "CANVAS" ? img.toDataURL() : img.src;
+
+  const printWindow = window.open("", "_blank");
+  printWindow.document.write(`
+    <html>
+      <head><title>QR - ${machineCode}</title></head>
+      <body style="text-align:center; font-family:Arial; padding:40px;">
+        <h2>${machineCode}</h2>
+        <img src="${src}" />
+        <script>window.onload = function(){ window.print(); }</script>
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
 }
