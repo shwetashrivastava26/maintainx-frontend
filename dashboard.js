@@ -990,14 +990,14 @@ function generateQR(machineCode) {
   `;
 
   modal.innerHTML = `
-    <div style="background:#fff; padding:30px; border-radius:10px; text-align:center; font-family:Arial; max-width:320px;">
-      <h2 style="margin-top:0;">${machineCode}</h2>
-      <div id="qrCanvasBox"></div>
-      <p style="font-size:12px; word-break:break-all;">${url}</p>
-      <button onclick="printQR('${machineCode}')" style="margin:5px; padding:8px 16px;">Print</button>
-      <button onclick="document.getElementById('qrModal').remove()" style="margin:5px; padding:8px 16px;">Close</button>
-    </div>
-  `;
+  <div style="background:#fff; padding:30px; border-radius:10px; text-align:center; font-family:Arial; max-width:320px;">
+    <h2 style="margin-top:0;">${machineCode}</h2>
+    <div id="qrCanvasBox" style="display:flex; justify-content:center;"></div>
+    <p style="font-size:12px; word-break:break-all;"><a href="${url}" target="_blank">${url}</a></p>
+    <button onclick="printQR('${machineCode}')" style="margin:5px; padding:8px 16px;">Print</button>
+    <button onclick="document.getElementById('qrModal').remove()" style="margin:5px; padding:8px 16px;">Close</button>
+  </div>
+`;
 
   document.body.appendChild(modal);
 
