@@ -110,8 +110,10 @@ async function loadMachines() {
           'status-repair'
         }">${machine.status}</td>
         <td>
+          <button onclick="generateQR('${machine.code}')">QR</button>
           <button onclick="editRow(${machine.id})">Edit</button>
           <button onclick="deleteRow(${machine.id})">Delete</button>
+
         </td>
       `;
     });
@@ -972,3 +974,41 @@ window.onload = async function () {
   await seedDefaultMachines();
   await refreshAll();
 };
+
+/* =====================================
+   QR CODE GENERATION
+===================================== */
+
+function generateQR(machineCode) {
+  const url = `${window.location.origin}/machine.html?code=${machineCode}`;
+
+  const container = document.createElement("div");
+  container.style.cssText = "padding:20px; text-align:center; font-family:Arial;";
+  container.innerHTML = `<h3>${machineCode}</h3><div id="qrTemp"></div><p>${url}</p>`;
+
+  document.body.appendChild(container);
+
+  QRCode.toCanvas(container.querySelector("#qrTemp"), url, { width: 250 }, function (err, canvas) {
+    if (err) {
+      showToast("QR generation failed", "error");
+      document.body.removeChild(container);
+      return;
+    }
+
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head><title>QR - ${machineCode}</title></head>
+        <body style="text-align:center; font-family:Arial; padding:40px;">
+          <h2>${machineCode}</h2>
+          <img src="${canvas.toDataURL()}" />
+          <p>${url}</p>
+          <script>window.onload = function(){ window.print(); }</script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+
+    document.body.removeChild(container);
+  });
+}

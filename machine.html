@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Details</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: #1a2744;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 28px 32px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            margin: 16px;
+            box-sizing: border-box;
+        }
+        h2 { color: #1a2744; margin-top: 0; }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        .detail-row span:first-child { color: #666; }
+        .detail-row span:last-child { color: #1a2744; font-weight: bold; }
+        label {
+            font-size: 14px;
+            color: #444;
+            display: block;
+            margin: 14px 0 6px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #fff;
+            color: #333;
+            outline: none;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: #1a2744;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        #message {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" id="machineCard">
+    <h2>Loading...</h2>
+</div>
+
+<div class="card" id="logCard" style="display:none;">
+    <h2>Quick Maintenance Log</h2>
+
+    <label>Technician</label>
+    <input type="text" id="logTechnician" placeholder="Technician Name">
+
+    <label>Date</label>
+    <input type="date" id="logDate">
+
+    <label>Cost (₹)</label>
+    <input type="number" id="logCost" min="0" placeholder="Cost">
+
+    <label>Status</label>
+    <select id="logStatus">
+        <option>Completed</option>
+        <option>Pending</option>
+        <option>In Progress</option>
+    </select>
+
+    <button onclick="submitLog()">Submit Log</button>
+    <p id="message"></p>
+</div>
+
+<script>
+const API_BASE = "https://maintainx-production.up.railway.app/api";
+
+const params = new URLSearchParams(window.location.search);
+const code = params.get("code");
+
+let machineName = "";
+
+async function loadMachine() {
+    const card = document.getElementById("machineCard");
+
+    if (!code) {
+        card.innerHTML = "<h2>No machine code provided</h2>";
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API_BASE}/machines`);
+        const machines = await res.json();
+        const machine = machines.find(m => m.code === code);
+
+        if (!machine) {
+            card.innerHTML = "<h2>Machine not found</h2>";
+            return;
+        }
+
+        machineName = machine.machine;
+
+        card.innerHTML = `
+            <h2>${machine.machine}</h2>
+            <div class="detail-row"><span>Code</span><span>${machine.code}</span></div>
+            <div class="detail-row"><span>Block</span><span>${machine.block}</span></div>
+            <div class="detail-row"><span>Status</span><span>${machine.status}</span></div>
+        `;
+
+        document.getElementById("logCard").style.display = "block";
+
+    } catch (err) {
+        card.innerHTML = "<h2>Error loading machine</h2>";
+    }
+}
+
+async function submitLog() {
+    const technician = document.getElementById("logTechnician").value.trim();
+    const date       = document.getElementById("logDate").value;
+    const cost       = document.getElementById("logCost").value;
+    const status     = document.getElementById("logStatus").value;
+
+    if (!technician || !date || !cost) {
+        document.getElementById("message").style.color = "red";
+        document.getElementById("message").innerText = "Please fill all fields";
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API_BASE}/logs`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                machine: machineName,
+                date,
+                technician,
+                cost: parseFloat(cost),
+                status
+            })
+        });
+
+        if (res.ok) {
+            document.getElementById("message").style.color = "green";
+            document.getElementById("message").innerText = "Log submitted successfully!";
+            document.getElementById("logTechnician").value = "";
+            document.getElementById("logDate").value = "";
+            document.getElementById("logCost").value = "";
+        } else {
+            document.getElementById("message").style.color = "red";
+            document.getElementById("message").innerText = "Failed to submit log";
+        }
+    } catch (err) {
+        document.getElementById("message").style.color = "red";
+        document.getElementById("message").innerText = "Server error";
+    }
+}
+
+window.onload = loadMachine;
+</script>
+
+</body>
+</html>
