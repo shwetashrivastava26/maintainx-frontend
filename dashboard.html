@@ -24,7 +24,8 @@
   <a href="#tickets">⚠ Fault Tickets</a>
   <a href="#parts">📦 Spare Parts Inventory</a>
   <a href="#reports">📈 Maintenance Reports</a>
-  <a href="#audit">📋 Audit Log</a>
+  <!-- <a href="#audit">📋 Audit Log</a> -->
+  <a href="#audit" id="navAudit">📋 Audit Log</a>
   <a href="index.html">🚪 Logout</a>
 
 </div>
@@ -105,7 +106,8 @@
       <option value="Testing and Auxiliary Facilities">Testing and Auxiliary Facilities</option>
     </select>
 
-    <div class="registry-controls">
+    <!-- <div class="registry-controls"> -->
+    <div class="registry-controls" id="registryControls">
       <input type="text" id="machineCode" placeholder="Machine Code">
       <input type="text" id="block" placeholder="Block">
       <input type="text" id="machineName" placeholder="Machine Name">
@@ -142,7 +144,8 @@
 
     <h2>Maintenance Log</h2>
 
-    <div class="log-controls">
+    <!-- <div class="log-controls"> -->
+    <div class="log-controls" id="logControls">
       <input type="text" id="logMachine" placeholder="Machine Name">
       <input type="date" id="logDate">
       <input type="text" id="logTechnician" placeholder="Technician">
@@ -184,6 +187,7 @@
     <h2>Fault Tickets</h2>
 
     <div class="ticket-controls">
+    <div class="ticket-controls" id="ticketControls">
       <input type="text" id="ticketMachine" placeholder="Machine Name">
       <select id="ticketPriority">
         <option>Low</option>
@@ -225,7 +229,8 @@
 
     <h2>Spare Parts Inventory</h2>
 
-    <div class="parts-controls">
+    <!-- <div class="parts-controls"> -->
+    <div class="parts-controls" id="partsControls">
       <input type="text" id="partName" placeholder="Part Name">
       <input type="number" id="partStock" placeholder="Stock" min="0">
       <input type="number" id="partReorder" placeholder="Reorder Level" min="0">
@@ -312,7 +317,8 @@
   <section id="audit">
 
     <h2>Audit Log</h2>
-    <button onclick="clearAuditLog()">
+    <!-- <button onclick="clearAuditLog()"> -->
+    <button onclick="clearAuditLog()" id="clearAuditBtn">
     Clear Audit Log
     </button>
 
@@ -332,6 +338,35 @@
   </section>
 
 </div>
+
+<script>
+let params = new URLSearchParams(window.location.search);
+let role = params.get("role");
+
+function hide(id){
+    let el = document.getElementById(id);
+    if(el) el.style.display = "none";
+}
+
+// EMPLOYEE: hide audit log entirely, no add/edit controls
+if(role === "employee"){
+    hide("navAudit");
+    hide("audit");
+    hide("registryControls");
+    hide("logControls");
+    hide("ticketControls");
+    hide("partsControls");
+}
+
+// TRACKER: can add Logs & Tickets, view-only elsewhere, no audit
+if(role === "tracker"){
+    hide("navAudit");
+    hide("audit");
+    hide("registryControls");
+    hide("partsControls");
+}
+</script>
+
 
 <script src="dashboard.js"></script>
 
